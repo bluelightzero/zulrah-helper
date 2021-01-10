@@ -1,0 +1,870 @@
+
+<html>
+  <head>
+    <style>
+      body {
+        background-color:#464b3c;
+        font-family:arial;
+        
+        overflow-x: hidden;
+        margin:0px;
+        
+        padding-bottom:50%;
+      }
+      
+      .map {
+        position:relative;
+        width:100vw;
+        height:70.37vw;
+        
+        padding:0px;
+        
+        background-image: url("images/map.png");
+        background-position: center;
+        background-size: cover;
+      }
+      
+      .tick {
+        font-size:100px;
+        cursor:pointer;
+      }
+      
+      .phase {
+        position:absolute;
+        
+        background-position: center;
+        background-size: cover;
+        width:18.51vw;
+        height:18.51vw;
+      }
+      
+      .phase.blue { background-image: url("images/phase-blue.png"); }
+      .phase.green { background-image: url("images/phase-green.png"); }
+      .phase.red { background-image: url("images/phase-red.png"); }
+      .phase.jadRange { background-image: url("images/phase-jad-range.png"); }
+      .phase.jadMagic { background-image: url("images/phase-jad-magic.png"); }
+      
+      .phase.left     { top:37.03vw; left:03.70vw; }
+      .phase.altleft1 { top:29.62vw; left:03.70vw; }
+      .phase.altleft2 { top:48.14vw; left:03.70vw; }
+      .phase.right    { top:37.03vw; right:03.70vw; }
+      .phase.middle   { top:44.44vw; left:40.74vw; }
+      .phase.top      { top:03.70vw; left:40.74vw; }
+      
+      .phase.next { opacity:0.3; }
+      
+      @keyframes pulse {
+        0% {
+          transform:scale(1.0,1.0);
+        }
+        10% {
+          transform:scale(0.8, 0.8);
+        }
+        100% {
+          transform:scale(1.0,1.0);
+        }
+      }
+      
+      .phase.option {
+        cursor:pointer;
+        animation: pulse 0.6s infinite;
+      }
+      
+      .position {
+        position:absolute;
+        
+        background-image: url("images/position.png");
+        background-position: center;
+        background-size: cover;
+        width:11.11vw;
+        height:11.11vw;
+      }
+      
+      .target {
+        position:absolute;
+        
+        background-image: url("images/target.png");
+        background-position: center;
+        background-size: cover;
+        width:11.11vw;
+        height:11.11vw;
+      }
+      
+      .blink {
+        animation: blink 0.6s infinite step-end;
+      }
+      
+      @keyframes blink {
+        0% {
+          opacity:1.0;
+        }
+        25% {
+          opacity:0.0;
+        }
+        50% {
+          opacity:1.0;
+        }
+        75% {
+          opacity:0.0;
+        }
+        100% {
+          opacity:1.0;
+        }
+      }
+      
+      .hidden {
+        display:none;
+      }
+      
+      .notes {
+        max-width:400px;
+        padding:30px;
+        margin-left:auto;
+        margin-right:auto;
+      }
+      
+      .fit-img {
+        width:100%;
+      }
+      
+      h1, h2, h3 {
+        text-align: center;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="map hidden">
+      <div class="phase top"></div>
+      <div class="phase middle green option"></div>
+      <div class="phase left"></div>
+      <div class="phase altleft1"></div>
+      <div class="phase altleft2"></div>
+      <div class="phase right"></div>
+      <div class="position hidden"></div>
+      <div class="target hidden"></div>
+    </div>
+    <div class="tick"></div>
+    <div class="notes">
+      <h1>Bluelitezero's<br />Zulrah Helper<br />Beta v0.1</h1>
+      <p>
+        Hello, bluelitezero here.
+      </p>
+      <img class="fit-img" src="./images/bluelitezero.png"/>
+      <p>
+        This is a zulrah helper I made for myself to get elite void.
+        It turned out pretty good so I thought I might share it with everyone.
+      </p>
+      <h2>Positions</h2>
+      <p>
+        Before starting, you should travel to zulrah's shrine and label all the
+        positions using runelite's Ground Markers plugin.
+      </p>
+      <img class="fit-img" src="./images/tile-plugin.png"/>
+      <p>
+        Using shift, you can right click to mark and right click to label
+        marked tiles. Mark and label the positions shown on the map 1-7.
+      </p>
+      <img class="fit-img" src="./images/mark-tile.png"/>
+      <h2>Starting the Helper</h2>
+      <p>
+        When you enter zulrah's shrine, the chatbox message will stall zulrah
+        until you move.
+      </p>
+      <img class="fit-img" src="./images/stall.png"/>
+      <p>
+        As soon as the countdown says go, you should click to run to position 1.
+        If you time it wrong, then the helper will become out of sync.
+        This may not be too much of problem if start too it late, but too early
+        and you may miss important callouts.
+        I recommend just telepoorting out if you mess up.
+      </p>
+      <h2>Desync due to lag</h2>
+      <p>
+        If the server lags (When everything seems to pause for a few seconds)
+        then the helper will become desynced.
+        If this happens then callouts will be given too soon
+        (Which could be a problem on the Jad Phase)
+        If you are not confident you can do it without the helper, I recommend
+        you teleport out at this point.
+      </p>
+      <p>
+        There are runelite plugins that can help let you know when you are lagging.
+        The first is called "Metronome". It will not tick if the server lags.
+      </p>
+      <img class="fit-img" src="./images/metronome.png"/>
+      <p>
+        Alternativly, if you prefer a silent option. You can install my
+        Unresponsive Cursor plugin from the plugin hub.
+        During lag, your cursor will change. 
+      </p>
+      <img class="fit-img" src="./images/unresponsive-cursor.png"/>
+    </div>
+    <script
+      src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"
+      integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8="
+      crossorigin="anonymous"></script>
+    <script>
+      
+      var positions = [
+        [8, 17],
+        [10, 18],
+        [10, 11],
+        [19, 10],
+        [18, 12],
+        [20, 15],
+        [18, 18],
+      ];
+      
+      var rotations = {
+        'none': {
+          sounds: [
+            [-3, '3'],
+            [-2, '2'],
+            [-1, '1'],
+            [0, 'go'],
+            [2, 'readyToAttack'],
+            [6, 'now'],
+            [9, 'stayPos1'],
+            [11, 'readyPrayers'],
+            [14, 'redGreenOrBlue'],
+            [20, 'prayRedGreenBlue'],
+            
+            [33, 'ifRed'],
+            [35, 'readyToDodge2'],
+            [40, 'dodge'],
+            [42, 'select'],
+          ],
+          positions: [
+            [-4, 0, 1],
+            [35, 40, 2],
+          ],
+          snakes: [
+            {
+              time: 1,
+              middle: 'green',
+            },
+            {
+              time: 30,
+              altleft1: 'green',
+              altleft2: 'blue',
+              middle: 'red',
+            }
+          ]
+        },
+        '1or2': {
+          sounds: [
+            [35, 'readyToDodge2'],
+            [40, 'dodge'],
+            [46, 'nextMagic'],
+            [50, 'prayMagicEquipRangeAttack'], // Unclear?
+            [56, 'nextRange'],
+            [60, 'readyRangePos5'],
+            [66, 'go'],
+            [68, 'equipMagicAttack'],
+            [72, 'select'],
+          ],
+          positions: [
+            [-4, 0, 1],
+            [35, 40, 2],
+            [60, 66, 5],
+          ],
+          snakes: [
+            {
+              time: 30,
+              middle: 'red',
+            },
+            {
+              time: 52,
+              middle: 'blue',
+            },
+            {
+              time: 69,
+              top: 'green',
+              right: 'green',
+            }
+          ]
+        },
+        '1': {
+          sounds: [
+            [95, 'nextMelee'],
+            [100, 'stayIn5Melee'],
+            // Turn off prayer?
+            [107, 'readyToAttack'],
+            [112, 'now'],
+            [117, 'nextMagic'],
+            [127, 'prayMagicEquipRangeAttack'],
+            [135, 'nextRange'],
+            [140, 'readyRangePos3'],
+            [150, 'go'],
+            [154, 'equipMagicAttack'],
+            [160, 'nextMagic'],
+            [178, 'prayMagicEquipRangeAttack'],
+            [186, 'nextRangeJad'],
+            [192, 'readyMovePos4'],
+            [197, 'go'],
+            [204, 'equipMagicPrayers'],
+            [219, 'prayRangeHigh'],
+            [222, 'prayMagicLow'],
+            [225, 'prayRangeHigh'],
+            [228, 'prayMagicLow'],
+            [231, 'prayRangeHigh'],
+            [234, 'prayMagicLow'],
+            [237, 'prayRangeHigh'],
+            [240, 'prayMagicLow'],
+            [243, 'prayRangeHighFinal'],
+            [245, 'prayMagicLowFinal'],
+            [248, 'readyPos1'],
+            [253, 'go'],
+            [257, 'nextMelee'],
+            [274, 'readyToDodge2'],
+            [279, 'dodge'],
+            [281, 'finish'],
+          ],
+          positions: [
+            [60, 66, 5],
+            [145, 150, 3],
+            [192, 197, 4],
+            [248, 253, 1],
+            [274, 279, 2],
+          ],
+          snakes: [
+            {
+              time: 69,
+              top: 'green',
+            },
+            {
+              time: 109,
+              middle: 'red',
+            },
+            {
+              time: 132,
+              right: 'blue',
+            },
+            {
+              time: 153,
+              top: 'green',
+            },
+            {
+              time: 181,
+              top: 'blue',
+            },
+            {
+              time: 219,
+              right: 'jadRange',
+            },
+            {
+              time: 268,
+              middle: 'red',
+            },
+            {
+              time: 289,
+              middle: 'green',
+            },
+          ]
+        },
+        '2': {
+          sounds: [
+            [80, 'nextMagic'],
+            [84, 'needLongRange'],
+            [92, 'prayMagicEquipRangeLongRangeAttack'],
+            [100, 'nextMelee'],
+            [105, 'stayIn5Melee'],
+            [114, 'turnOffPrayer'],
+            [130, 'readyRapid'],
+            [136, 'now'],
+            [138, 'equipMagicAttack'],
+            [147, 'nextRange'],
+            [152, 'readyRangePos3'],
+            [158, 'go'],
+            [158, 'nextMagic'],
+            [176, 'readyMovePos4'],
+            [181, 'go'],
+            [184, 'prayMagicEquipRangeAttack'],
+            [195, 'nextRangeJad'],
+            [205, 'equipMagicPrayers'],
+            [220, 'prayRangeHigh'],
+            [223, 'prayMagicLow'],
+            [226, 'prayRangeHigh'],
+            [229, 'prayMagicLow'],
+            [232, 'prayRangeHigh'],
+            [235, 'prayMagicLow'],
+            [238, 'prayRangeHigh'],
+            [241, 'prayMagicLow'],
+            [244, 'prayRangeHighFinal'],
+            [246, 'prayMagicLowFinal'],
+            [247, 'readyPos1'],
+            [254, 'go'],
+            [258, 'nextMelee'],
+            [275, 'readyToDodge2'],
+            [280, 'dodge'],
+            [282, 'finish'],
+          ],
+          positions: [
+            [60, 66, 5],
+            [153, 158, 3],
+            [176, 181, 4],
+            [246, 251, 1],
+            [275, 280, 2],
+          ],
+          snakes: [
+            {
+              time: 69,
+              right: 'green',
+            },
+            {
+              time: 99,
+              top: 'blue',
+            },
+            {
+              time: 139,
+              middle: 'red',
+            },
+            {
+              time: 162,
+              left: 'green',
+            },
+            {
+              time: 183,
+              top: 'blue',
+            },
+            {
+              time: 220,
+              right: 'jadRange',
+            },
+            {
+              time: 269,
+              middle: 'red',
+            },
+            {
+              time: 290,
+              middle: 'green',
+            },
+          ]
+        },
+        '3': {
+          sounds: [
+            [45, 'nextMelee'],
+            [54, 'readyPos6'],
+            [59, 'go'],
+            [78, 'readyToDodge7'],
+            [84, 'dodge'],
+            [86, 'readyToDodge6'],
+            [92, 'dodge'],
+            [95, 'nextMagic'],
+            [100, 'prayMagicEquipRangeAttack'],
+            [110, 'nextRange'],
+            [114, 'readyRangePos3'],
+            [120, 'go'],
+            [123, 'equipMagicAttack'],
+            [136, 'nextMagic'],
+            [141, 'prayMagicEquipRangeAttack'],
+            [152, 'nextRange'],
+            [157, 'readyRangePos5'],
+            [163, 'go'],
+            [171, 'equipMagicAttack'],
+            [185, 'nextRangeAgain'],
+            [198, 'nextMagic'],
+            [204, 'readyMagicPos3'],
+            [210, 'go'],
+            [215, 'equipRangeAttack'],
+            [225, 'nextMagicJad'],
+            [234, 'equipMagicPrayers'],
+            [249, 'prayMagicHigh'],
+            [252, 'prayRangeLow'],
+            [255, 'prayMagicHigh'],
+            [258, 'prayRangeLow'],
+            [261, 'prayMagicHigh'],
+            [264, 'prayRangeLow'],
+            [267, 'prayMagicHigh'],
+            [270, 'prayRangeLow'],
+            [273, 'prayMagicHighFinal'],
+            [275, 'prayRangeLowFinal'],
+            [279, 'nextMagic'],
+            [283, 'prayMagicEquipRangeAttack'],
+            [293, 'finish'],
+          ],
+          positions: [
+            [-4, 0, 1],
+            [54, 59, 6],
+            [79, 84, 7],
+            [86, 92, 6],
+            [115, 120, 3],
+            [158, 163, 5],
+            [205, 210, 3],
+            [297, 302, 1],
+          ],
+          snakes: [
+            {
+              time: 30,
+              left: 'green',
+            },
+            {
+              time: 61,
+              middle: 'red',
+            },
+            {
+              time: 102,
+              right: 'blue',
+            },
+            {
+              time: 123,
+              top: 'green',
+            },
+            {
+              time: 144,
+              left: 'blue',
+            },
+            {
+              time: 156,
+              middle: 'green',
+            },
+            {
+              time: 191,
+              right: 'green',
+            },
+            {
+              time: 212,
+              middle: 'blue',
+            },
+            {
+              time: 249,
+              left: 'jadMagic',
+            },
+            {
+              time: 285,
+              middle: 'blue',
+            },
+            {
+              time: 304,
+              middle: 'green',
+            },
+          ]
+        },
+        '4': {
+          sounds: [
+            [45, 'nextRange'],
+            [55, 'readyRangePos5'],
+            [65, 'go'],
+            [69, 'equipMagicAttack'],
+            [84, 'nextMagic'],
+            [89, 'prayMagicEquipRangeAttack'],
+            [106, 'nextMelee'],
+            [111, 'stayIn5Melee'],
+            [120, 'turnOffPrayer'],
+            [124, 'equipMagicAttack'],
+            [130, 'readyRangePos3'], // noise?
+            [136, 'go'],
+            [152, 'equipMagicAttack'],
+            [165, 'nextRangeAgain'],
+            [179, 'readyMagicPos5'],
+            [185, 'go'],
+            [202, 'equipRangeAttack'],
+            [228, 'readyRangePos3'],
+            [234, 'go'],
+            [242, 'equipMagicAttack'],
+            [250, 'nextMagic'],
+            [255, 'prayMagicEquipRangeAttack'],
+            [264, 'nextMagicJad'],
+            [273, 'equipMagicPrayers'],
+            [280, 'firstSwitchRange'],
+            [291, 'prayRangeHigh'],
+            [294, 'prayMagicLow'],
+            [297, 'prayRangeHigh'],
+            [300, 'prayMagicLow'],
+            [303, 'prayRangeHigh'],
+            [306, 'prayMagicLow'],
+            [309, 'prayRangeHigh'],
+            [312, 'prayMagicLow'],
+            [315, 'prayRangeHighFinal'],
+            [317, 'prayMagicLowFinal'],
+            [320, 'equipRangeAttack'],
+            [332, 'finish'],
+          ],
+          positions: [
+            [-4, 0, 1],
+            [60, 65, 5],
+            [131, 136, 3],
+            [180, 185, 5],
+            [229, 234, 3],
+          ],
+          snakes: [
+            {
+              time: 30,
+              left: 'blue',
+            },
+            {
+              time: 67,
+              top: 'green',
+            },
+            {
+              time: 92,
+              right: 'blue',
+            },
+            {
+              time: 123,
+              middle: 'red',
+            },
+            {
+              time: 151,
+              left: 'green',
+            },
+            {
+              time: 169,
+              top: 'green',
+            },
+            {
+              time: 204,
+              right: 'blue',
+            },
+            {
+              time: 238,
+              middle: 'green',
+            },
+            {
+              time: 259,
+              middle: 'blue',
+            },
+            {
+              time: 287,
+              left: 'jadMagic',
+            },
+            {
+              time: 317,
+              middle: 'blue',
+            },
+            {
+              time: 336,
+              middle: 'green',
+            },
+          ]
+        }
+      }
+      
+      var audio = {};
+      var audioFiles = ['tick'];
+      
+      for(var rotationName in rotations) {
+        var rotation = rotations[rotationName];
+        for(var s=0;s<rotation.sounds.length;s++) {
+          var audioName = rotation.sounds[s][1];
+          
+          if(audioFiles.indexOf(audioName) == -1) {
+            audioFiles.push(audioName);
+          }
+        }
+      }
+      
+      var audioNotLoaded = 0;
+      
+      for(var i=0;i<audioFiles.length;i++) {
+        var name = audioFiles[i];
+        audioNotLoaded++;
+        audio[name] = new Audio();
+        audio[name].addEventListener('canplaythrough', function() { 
+           audioNotLoaded--;
+           if(audioNotLoaded == 0) {
+             start();
+           }
+        }, false);
+        audio[name].src = 'audio/'+name+'.mp3';
+      }
+      
+      var timeout = null;
+      var firstTickTime = 0;
+      var time = 0;
+      
+      var currentRotation = 'none';
+      
+      function start() {
+        $('.map').removeClass('hidden');
+        
+        $('.phase.middle').one('click', function() {
+          time = -4;
+          firstTickTime = Date.now()+(4*600);
+          tick();
+        });
+      }
+      
+      function playAudio(name) {
+        var a = audio[name];
+        a.currentTime = 0;
+        a.play();
+      }
+      
+      function tickSounds(rotation) {
+        for(var s=0;s<rotation.sounds.length;s++) {
+          if(rotation.sounds[s][0] == time) {
+            playAudio(rotation.sounds[s][1]);
+            break;
+          }
+        }
+      }
+      
+      var snakeSpawns = ['altleft1', 'altleft2', 'left', 'right', 'top', 'middle'];
+      
+      function tickVisuals(rotation) {
+        var snakes = {};
+        var snakesNext = {};
+        for(var s=0;s<rotation.snakes.length;s++) {
+          if(rotation.snakes[s].time <= time) {
+            snakes = rotation.snakes[s];
+          } else {
+            snakesNext = rotation.snakes[s];
+            break;
+          }
+        }
+        
+        var options = 0;
+        
+        for(var ss=0;ss<snakeSpawns.length;ss++) {
+          var name = snakeSpawns[ss];
+          var snake = snakes[name];
+          if(snake) options++;
+        }
+        
+        for(var ss=0;ss<snakeSpawns.length;ss++) {
+          var name = snakeSpawns[ss];
+          var phase = $('.phase.'+name)
+          
+          var snake = snakes[name];
+          var snakeNext = snakesNext[name];
+          
+          phase.removeClass('red green blue jadMagic jadRange');
+            
+          if(snake && (!snakeNext || snakesNext.time > time + 5)) {
+            phase.addClass(snake);
+            phase.removeClass('next');
+              
+            if(options > 1) {
+              phase.addClass('option');
+            } else {
+              phase.removeClass('option');
+            }
+          } else if(snakeNext) {
+            phase.addClass(snakeNext);
+            phase.addClass('next');
+            phase.removeClass('option');
+          } else {
+            phase.removeClass('next');
+            phase.removeClass('option');
+          }
+        }
+        
+        var target = null;
+        var position = null;
+        
+        for(var p=0;p<rotation.positions.length;p++) {
+          if(rotation.positions[p][0] <= time) {
+            target = rotation.positions[p];
+          }
+          if(rotation.positions[p][1] <= time) {
+            position = rotation.positions[p];
+          }
+        }
+        
+        if(target != null) {
+          var p = positions[target[2]-1];
+          $('.target').removeClass('hidden');
+          $('.target').css({
+            left: ((p[0]-2)/27*100)+'vw',
+            top: ((p[1]-2)/27*100)+'vw',
+          });
+          
+          if(position != null && time >= position[1] && time <= position[1]+1) {
+            $('.target').addClass('blink');
+          } else {
+            $('.target').removeClass('blink');
+          }
+          
+        } else {
+          $('.target').addClass('hidden');
+        }
+        
+        if(position != null) {
+          var p = positions[position[2]-1];
+          $('.position').removeClass('hidden');
+          $('.position').css({
+            left: ((p[0]-2)/27*100)+'vw',
+            top: ((p[1]-2)/27*100)+'vw',
+          });
+          
+          if(time >= position[1] && time <= position[1]+1) {
+            $('.position').addClass('blink');
+          } else {
+            $('.position').removeClass('blink');
+          }
+        } else {
+          $('.position').addClass('hidden');
+        }
+      }
+      
+      $('.tick').click(function() {
+        var t = (Date.now()-firstTickTime)/600;
+        var tRounded = Math.round(t*10)/10;
+        console.log(tRounded);
+      });
+      
+      function tick() {
+        playAudio('tick');
+        
+        $('.tick').html(time);
+        
+        var rotation = rotations[currentRotation];
+        
+        tickSounds(rotation);
+        tickVisuals(rotation, false);
+        
+        if(currentRotation == 'none') {
+          if(time == 30) {
+            $('.phase.middle').one('click', function() {
+              currentRotation = '1or2';
+              tickVisuals(rotations[currentRotation], true);
+              
+              if(time > 69) {
+                $('.phase.top').one('click', function() {
+                  currentRotation = '1';
+                  tickVisuals(rotations[currentRotation], true);
+                });
+                
+                $('.phase.right').one('click', function() {
+                  currentRotation = '2';
+                  tickVisuals(rotations[currentRotation], true);
+                });
+              }
+            });
+            
+            $('.phase.altleft1').one('click', function() {
+              currentRotation = '3';
+              tickVisuals(rotations[currentRotation], true);
+            });
+            
+            $('.phase.altleft2').one('click', function() {
+              currentRotation = '4';
+              tickVisuals(rotations[currentRotation], true);
+            });
+          }
+        }
+        if(currentRotation == '1or2') {
+          if(time == 68) {
+            $('.phase.top').one('click', function() {
+              currentRotation = '1';
+              tickVisuals(rotations[currentRotation], true);
+            });
+            
+            $('.phase.right').one('click', function() {
+              currentRotation = '2';
+              tickVisuals(rotations[currentRotation], true);
+            });
+          }
+        }
+          
+        time++;
+        
+        var nextTickTime = firstTickTime+(time*600);
+        var timeTillNextTick = Math.max(nextTickTime-Date.now(), 0);
+        timeout = setTimeout(tick, timeTillNextTick);
+      }
+    
+    </script>
+  </body>
+</html>
