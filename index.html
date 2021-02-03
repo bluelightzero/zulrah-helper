@@ -6,10 +6,15 @@
         background-color:#464b3c;
         font-family:arial;
         
+        color:#9FA88E;
+        
         overflow-x: hidden;
         margin:0px;
         
         padding-bottom:50%;
+        
+        text-shadow:0px 0px 4px rgba(0,0,0,0.5) ;
+        
       }
       
       .map {
@@ -134,6 +139,10 @@
       a {
         color:#88f;
       }
+      
+      label {
+        color:white;
+      }
     </style>
   </head>
   <body>
@@ -149,7 +158,11 @@
     </div>
     <div class="tick"></div>
     <div class="notes">
-      <h1>Bluelitezero's<br />Zulrah Helper<br />Beta v0.1</h1>
+      <p>
+        <label><input type="checkbox" id="metronome-checkbox" />Metronome</label><br />
+        <label><input type="checkbox" id="voice-checkbox" checked />Voice</label>
+      </p>
+      <h1>Bluelitezero's<br />Zulrah Helper<br />Beta v0.2</h1>
       <p>
         Hello, bluelitezero here.
       </p>
@@ -187,7 +200,7 @@
         If you time it wrong, then the helper will become out of sync.
         This may not be too much of problem if start too it late, but too early
         and you may miss important callouts.
-        I recommend just telepoorting out if you mess up.
+        I recommend just teleporting out if you mess up.
       </p>
       <h2>Desync due to lag</h2>
       <p>
@@ -703,12 +716,14 @@
       }
       
       function tickSounds(rotation) {
-        for(var s=0;s<rotation.sounds.length;s++) {
-          if(rotation.sounds[s][0] == time) {
-            playAudio(rotation.sounds[s][1]);
-            break;
+        var isVoiceOn = $("#voice-checkbox").is(':checked');
+        if(isVoiceOn)
+          for(var s=0;s<rotation.sounds.length;s++) {
+            if(rotation.sounds[s][0] == time) {
+              playAudio(rotation.sounds[s][1]);
+              break;
+            }
           }
-        }
       }
       
       var snakeSpawns = ['altleft1', 'altleft2', 'left', 'right', 'top', 'middle'];
@@ -816,7 +831,9 @@
       });
       
       function tick() {
-        playAudio('tick');
+        var isMetronomeOn = $("#metronome-checkbox").is(':checked');
+        if(isMetronomeOn)
+          playAudio('tick');
         
         $('.tick').html(time);
         
